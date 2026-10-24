@@ -126,6 +126,7 @@ export function quatConj(out: Quat, q: Quat): Quat {
   return out;
 }
 
+/** Scales q to unit length in place. A zero-length q comes back as all zeros, so callers that can see one must check first. */
 export function quatNormalize(q: Quat): Quat {
   const l = Math.sqrt(q[0]! * q[0]! + q[1]! * q[1]! + q[2]! * q[2]! + q[3]! * q[3]!);
   const s = l > 0 ? 1 / l : 0;
@@ -147,6 +148,7 @@ export function quatAddRotation(out: Quat, q: Quat, w: ArrayLike<number>, s: num
   out[1] = qy + (wz * qx - wx * qz + wy * qw);
   out[2] = qz + (wx * qy - wy * qx + wz * qw);
   out[3] = qw - (wx * qx + wy * qy + wz * qz);
+  // never zero-length: (s·w, 0) ⊗ q is orthogonal to a unit q, so |out|² = 1 + |½ s·w|²
   return quatNormalize(out);
 }
 
